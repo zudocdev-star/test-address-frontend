@@ -1,0 +1,64 @@
+.app-shell {
+  max-width: 560px;
+  margin: 48px auto;
+  padding: 24px;
+  text-align: left;
+}
+
+.location-form {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+  background: var(--social-bg);
+}
+
+.location-fieldset {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.form-row {
+  display: grid;
+  gap: 6px;
+}
+
+.country-display {
+  margin: 0;
+}
+
+.label-text {
+  font-weight: 600;
+}
+
+label {
+  font-size: 0.9rem;
+}
+
+select,
+button {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+button {
+  cursor: pointer;
+}
+
+.error-text {
+  color: #c0392b;
+  margin: 0;
+}
+
+.result-card {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
