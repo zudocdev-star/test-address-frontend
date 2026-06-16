@@ -64,14 +64,13 @@ function buildHierarchy(records: Loc1Record[]): CountryData[] {
   return [{ name: INDIA_NAME, code: 'IN', states }]
 }
 
-/** District keys present in locations.json: "state|district" */
+/** District keys present in locations.json: "district" */
 function buildLocationDistrictKeys(records: Loc1Record[]): Set<string> {
   const keys = new Set<string>()
   for (const r of records) {
-    const state    = r.statename?.trim()
     const district = r.district_name?.trim()
-    if (!state || !district) continue
-    keys.add(`${normalizeKey(state)}|${normalizeKey(district)}`)
+    if (!district) continue
+    keys.add(normalizeKey(district))
   }
   return keys
 }
@@ -105,7 +104,7 @@ function buildJoinedLocationRows(
     const localBodyType = row.localbody_type?.trim() ?? ''
     if (!state || !district || !localBody) continue
 
-    const joinKey = `${normalizeKey(state)}|${normalizeKey(district)}`
+    const joinKey = normalizeKey(district)
     if (!validDistrictKeys.has(joinKey)) continue
 
     rows.push({
@@ -132,8 +131,8 @@ type IndiaLocRecord = {
 
 const INDIA_PARSE_CHUNK = 8000
 
-function districtKey(state: string, district: string): string {
-  return `${normalizeKey(state)}|${normalizeKey(district)}`
+function districtKey(district: string): string {
+  return normalizeKey(district)
 }
 
 async function buildIndiaLocationsIndex(
@@ -163,7 +162,7 @@ async function buildIndiaLocationsIndex(
       const subdistrict = row.subdistrict_name?.trim()
       if (!state || !district) continue
 
-      const key = districtKey(state, district)
+      const key = districtKey(district)
       if (!index.has(key)) index.set(key, [])
       if (!subdistrictSets.has(key)) subdistrictSets.set(key, new Set())
       if (!districtMeta.has(key)) districtMeta.set(key, { state, district })
@@ -340,7 +339,7 @@ function App() {
 
   const indiaLocationRows = useMemo(() => {
     if (!location.state || !location.district || !indiaIndex) return []
-    return indiaIndex.get(districtKey(location.state, location.district)) ?? []
+    return indiaIndex.get(districtKey(location.district)) ?? []
   }, [location.state, location.district, indiaIndex])
   const [formError,         setFormError]         = useState('')
   const [confirmedLocation, setConfirmedLocation] = useState<LocationValue | null>(null)

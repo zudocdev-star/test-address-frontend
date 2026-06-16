@@ -218,11 +218,9 @@ function LocationSearchRow({
   // Local bodies (final_mapping) + villages/subdistricts (indiaLocations) for this district
   const pool = useMemo(() => {
     if (!stateName || !districtName) return []
-    const stateKey = stateName.toLowerCase()
     const districtKey = districtName.toLowerCase()
     const localBodies = locationRows.filter(
       (r) =>
-        r.stateNameEnglish?.toLowerCase() === stateKey &&
         r.districtNameEnglish?.toLowerCase() === districtKey,
     )
     return [...localBodies, ...indiaLocationRows]
@@ -233,17 +231,15 @@ function LocationSearchRow({
     if (!q || q.length < 2 || selectedRecord) return []
     return pool
       .filter((r) => {
-        const haystack = [
+        const fields = [
           r.entityName,
           r.subdistrictNameEnglish,
           r.localBodyNameEnglish,
           r.localBodyTypeName,
           r.entityType,
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .toLowerCase()
-        return haystack.includes(q)
+        ].filter(Boolean)
+        
+        return fields.some(field => field.toLowerCase().startsWith(q))
       })
       .slice(0, MAX_SUGGESTIONS)
   }, [pool, query, selectedRecord])
